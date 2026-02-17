@@ -1,17 +1,12 @@
-# Use official OpenJDK 21 image
-FROM eclipse-temurin:21-jdk
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 
-# Set working directory
 WORKDIR /app
-
-# Copy project files
 COPY . .
+RUN mvn clean package -DskipTests
 
-# Build the project
-RUN ./mvnw clean package -DskipTests
+FROM eclipse-temurin:21-jdk
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 
-# Expose port
 EXPOSE 8080
-
-# Run the jar file
-CMD ["java", "-jar", "target/Hospital_Management_System-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-jar","app.jar"]
