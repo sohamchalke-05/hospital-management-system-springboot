@@ -1,201 +1,83 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Hospital Management Dashboard</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<div th:fragment="content">
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <div class="topbar">
+        <h1>Hospital Dashboard</h1>
+        <div id="clock"></div>
+    </div>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            color: white;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        .header {
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(255,255,255,0.05);
-            backdrop-filter: blur(10px);
-        }
-
-        .header h1 {
-            font-weight: 600;
-        }
-
-        .clock {
-            font-size: 18px;
-            opacity: 0.9;
-        }
-
-        .container {
-            padding: 40px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-        }
-
-        .card {
-            background: rgba(255,255,255,0.08);
-            border-radius: 15px;
-            padding: 25px;
-            backdrop-filter: blur(15px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-        }
-
-        .card h3 {
-            font-weight: 400;
-            margin-bottom: 10px;
-        }
-
-        .card .number {
-            font-size: 36px;
-            font-weight: 700;
-        }
-
-        .status-badge {
-            margin-top: 15px;
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 20px;
-            background: #28a745;
-            font-size: 14px;
-        }
-
-        .footer {
-            text-align: center;
-            padding: 30px;
-            margin-top: 50px;
-            opacity: 0.7;
-            font-size: 14px;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .card {
-            animation: fadeInUp 0.8s ease forwards;
-        }
-
-    </style>
-</head>
-
-<body>
-
-<div class="header">
-    <h1>🏥 Hospital Management Dashboard</h1>
-    <div class="clock" id="clock"></div>
-</div>
-
-<div class="container">
-
-    <div class="grid">
-
+    <div class="cards">
         <div class="card">
             <h3>Total Patients</h3>
-            <div class="number" id="patients">0</div>
+            <div class="number" th:text="${totalPatients}">0</div>
         </div>
 
         <div class="card">
             <h3>Total Doctors</h3>
-            <div class="number" id="doctors">0</div>
+            <div class="number" th:text="${totalDoctors}">0</div>
         </div>
 
         <div class="card">
             <h3>Appointments Today</h3>
-            <div class="number" id="appointments">0</div>
+            <div class="number" th:text="${appointmentsToday}">0</div>
         </div>
 
         <div class="card">
             <h3>Available Beds</h3>
-            <div class="number" id="beds">0</div>
+            <div class="number" th:text="${availableBeds}">0</div>
+        </div>
+    </div>
+
+    <div class="charts">
+
+        <div class="chart-container">
+            <canvas id="appointmentsChart"></canvas>
         </div>
 
-        <div class="card">
-            <h3>System Status</h3>
-            <div class="status-badge">Operational</div>
-        </div>
-
-        <div class="card">
-            <h3>Database Connection</h3>
-            <div class="status-badge">Connected</div>
+        <div class="chart-container">
+            <canvas id="bedsChart"></canvas>
         </div>
 
     </div>
 
-</div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function updateClock(){
+            document.getElementById("clock").innerText =
+                new Date().toLocaleString();
+        }
+        setInterval(updateClock,1000);
+        updateClock();
 
-<div class="footer">
-    © 2026 Hospital Management System | Powered by Spring Boot & Render
-</div>
-
-<script>
-
-    // Animated Counter
-    function animateValue(id, start, end, duration) {
-        let range = end - start;
-        let current = start;
-        let increment = end > start ? 1 : -1;
-        let stepTime = Math.abs(Math.floor(duration / range));
-        let obj = document.getElementById(id);
-
-        let timer = setInterval(function() {
-            current += increment;
-            obj.textContent = current;
-            if (current == end) {
-                clearInterval(timer);
+        new Chart(document.getElementById('appointmentsChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+                datasets: [{
+                    label: 'Appointments',
+                    data: [12,19,8,15,22,18],
+                    backgroundColor: '#4da6ff'
+                }]
+            },
+            options:{
+                responsive:true,
+                maintainAspectRatio:false
             }
-        }, stepTime);
-    }
+        });
 
-    // Demo numbers (replace later with real API values)
-    animateValue("patients", 0, 128, 1500);
-    animateValue("doctors", 0, 25, 1500);
-    animateValue("appointments", 0, 42, 1500);
-    animateValue("beds", 0, 12, 1500);
+        new Chart(document.getElementById('bedsChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Occupied','Available'],
+                datasets: [{
+                    data: [38,12],
+                    backgroundColor: ['#ff4d4d','#28a745']
+                }]
+            },
+            options:{
+                responsive:true,
+                maintainAspectRatio:false
+            }
+        });
+    </script>
 
-    // Live Clock
-    function updateClock() {
-        const now = new Date();
-        document.getElementById("clock").textContent = now.toLocaleString();
-    }
-
-    setInterval(updateClock, 1000);
-    updateClock();
-
-</script>
-
-</body>
-</html>
+</div>
