@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Hospital Management Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+
+        .container {
+            padding: 40px;
+            text-align: center;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.1);
+            padding: 25px;
+            margin: 20px auto;
+            width: 80%;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+
+        .status {
+            font-size: 20px;
+            margin-top: 10px;
+        }
+
+        .footer {
+            margin-top: 50px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .badge {
+            padding: 8px 15px;
+            background: #28a745;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🏥 Hospital Management System</h1>
+
+    <div class="card">
+        <h2>Application Status</h2>
+        <p class="status">
+            <span class="badge">Backend Running Successfully</span>
+        </p>
+    </div>
+
+    <div class="card">
+        <h2>Database Status</h2>
+        <p class="status">
+            MySQL Connected Successfully ✅
+        </p>
+    </div>
+
+    <div class="card">
+        <h2>Server Information</h2>
+        <p class="status">
+            Environment: Production (Render)<br>
+            Java Version: 21<br>
+            Framework: Spring Boot 3.5
+        </p>
+    </div>
+
+    <div class="footer">
+        © 2026 Hospital Management System | Deployed on Render
+    </div>
+
+</div>
+
+</body>
+</html>
