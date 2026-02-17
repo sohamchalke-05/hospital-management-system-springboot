@@ -15,15 +15,13 @@ public class DashboardController {
     @GetMapping("/")
     public String dashboard(Model model) {
 
-        model.addAttribute("title", "Dashboard");
-        model.addAttribute("content", "dashboard :: content");
+        long totalPatients = patientRepository.count();
 
-        model.addAttribute("totalPatients", patientRepository.count());
-        model.addAttribute("totalDoctors", 25);
-        model.addAttribute("appointmentsToday", 12);
-        model.addAttribute("availableBeds", 8);
+        model.addAttribute("totalPatients", totalPatients);
+        model.addAttribute("totalDoctors", 25); // Replace with real repo later
+        model.addAttribute("appointmentsToday", 42); // Replace later
+        model.addAttribute("availableBeds", 12); // Replace later
 
-        return "layout";
+        return "dashboard";
     }
-
 }
